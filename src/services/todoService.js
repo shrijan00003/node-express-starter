@@ -147,8 +147,8 @@ export function getOffsetPages(page,perPage){
  * @param  {Number|String}  id
  * @return {Promise}
  */
-export function getTodo(id) {
-  return new Todo({ id }).fetch().then(todo => {
+export function getTodo(id,userId) {
+  return new Todo({ id , userId }).fetch().then(todo => {
     if (!todo) {
       throw new Boom.notFound('Todo not found');
     }
@@ -163,11 +163,12 @@ export function getTodo(id) {
  * @param  {Object}  Todo
  * @return {Promise}
  */
-export function createTodo(todo) {
+export function createTodo(todo , userId) {
   return new Todo({ 
       updated_at : todo.updated_at,
       title : todo.title,
-      details : todo.details
+      details : todo.details,
+      user_id : userId
     }).save().then(todo => todo.refresh());
 }
 
@@ -178,8 +179,8 @@ export function createTodo(todo) {
  * @param  {Object}         Todo
  * @return {Promise}
  */
-export function updateTodo(id, todo) {
-  return new Todo({ id }).save({
+export function updateTodo(id, todo, userId) {
+  return new Todo({ id, userId }).save({
     updated_at : new Date(),
     title : todo.title,
     details : todo.details
@@ -192,8 +193,8 @@ export function updateTodo(id, todo) {
  * @param  {Number|String}  id
  * @return {Promise}
  */
-export function deleteTodo(id) {
-  return new Todo({ id }).fetch().then(todo => todo.destroy());
+export function deleteTodo(id,userId) {
+  return new Todo({ id, userId}).fetch().then(todo => todo.destroy());
 }
 
 

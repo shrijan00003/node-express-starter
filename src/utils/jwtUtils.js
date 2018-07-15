@@ -16,9 +16,15 @@ export async function verifyUser(password ,user){
 }   
 
 export function createAccessToken(data){
-    return jwt.sign( {data}, process.env.ACCESS_TOKEN_CONST, { expiresIn: 60 * 30} ); 
+    return jwt.sign( {data}, process.env.ACCESS_TOKEN_CONST, { expiresIn: 60 * 60 * 30} ); 
 }
 
 export function createRefreshToken(data){
     return uid();
 }
+
+export function verifyAccessToken(token){
+    const res =  jwt.verify( token , process.env.ACCESS_TOKEN_CONST );
+    return res;
+}
+

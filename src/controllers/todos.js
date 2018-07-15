@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as todoService from '../services/todoService';
+import { authenticate } from '../middlewares/auth';
 
 
 const router = Router();
@@ -49,7 +50,7 @@ router.get('/', (req, res, next) => {
   }
   else{
     todoService
-      .getAllTodos()
+      .getAllTodos(req.userId)
       .then(data => res.json({ data }))
       .catch(err => next(err));
   }   
@@ -59,9 +60,9 @@ router.get('/', (req, res, next) => {
 /**
  * GET /api/todos/:id
  */
-router.get('/:id', (req, res, next) => {
+router.get('/:id', authenticate, (req, res, next) => {
   todoService
-    .getTodo(req.params.id)
+    .getTodo(req.params.id,req.userId)
     .then(data => res.json({ data }))
     .catch(err => next(err));
 });
@@ -69,9 +70,9 @@ router.get('/:id', (req, res, next) => {
 /**
  * POST /api/todos
  */
-router.post('/',(req, res, next) => {
+router.post('/',authenticate,(req, res, next) => {
   todoService
-    .createTodo(req.body)
+    .createTodo(req.body,req.userId)
     .then(data => res.status(200).json({ data }))
     .catch(err => next(err));
 });
@@ -79,9 +80,9 @@ router.post('/',(req, res, next) => {
 /**
  * PUT /api/todos/:id
  */
-router.put('/:id', findTodo, (req, res, next) => {
+router.put('/:id',authenticate, findTodo, (req, res, next) => {
   todoService
-    .updateTodo(req.params.id, req.body)
+    .updateTodo(req.params.id, req.body, req.userId)
     .then(data => res.json({ data }))
     .catch(err => next(err));
 });
@@ -89,9 +90,9 @@ router.put('/:id', findTodo, (req, res, next) => {
 /**
  * DELETE /api/todos/:id
  */
-router.delete('/:id', findTodo, (req, res, next) => {
+router.delete('/:id', authenticate, findTodo, (req, res, next) => {
   todoService
-    .deleteTodo(req.params.id)
+    .deleteTodo(req.params.id, req.userId)
     .then(data => res.status(200).json({ data }))
     .catch(err => next(err));
 });

@@ -71,6 +71,12 @@ export function deleteUser(id) {
   return new User({ id }).fetch().then(user => user.destroy());
 }
 
+
+
+/**
+ * 
+ * @param {*} emailParam 
+ */
 export function fetchByEmail(emailParam){
   if(emailParam){
     return User.forge({ email: emailParam})
@@ -84,6 +90,13 @@ export function fetchByEmail(emailParam){
   }
 }
 
+
+
+/**
+ * 
+ * @param {*} idParam 
+ * @param {*} refreshTokenParam 
+ */
 export function updateUserRefreshToken(idParam,refreshTokenParam){
   if(idParam){
     return User.forge({id:idParam})
@@ -91,5 +104,25 @@ export function updateUserRefreshToken(idParam,refreshTokenParam){
       refresh_token : refreshTokenParam
     })
     .then( user => user.refresh );
+  }
+}
+
+
+
+/**
+ * 
+ * @param {*} userId 
+ * @param {*} refreshToken 
+ */
+export function getByIdAndToken(userId,refreshToken){
+  if(userId && refreshToken){
+    return User.forge( { id : userId, refresh_token: refreshToken} )
+    .fetch()
+    .then(user => {
+      if(!user){
+        throw new Boom.notFound('user not found');
+      }
+      return user;
+    })
   }
 }
