@@ -46,7 +46,6 @@ export function getAllTodos() {
  * @param {*} title 
  */
 export function getFilteredByTitle(titleParam){
-  console.log(titleParam,'===============================================================');
   if(titleParam){
     return new Todo({ title : titleParam }).fetch().then(todo => {
       if (!todo) {

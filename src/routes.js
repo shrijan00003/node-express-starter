@@ -1,8 +1,11 @@
 import { Router } from 'express';
 import swaggerSpec from './utils/swagger';
+
 import usersController from './controllers/users';
 import todosController from './controllers/todos';
 import categoriesController from './controllers/categories';
+import registerController from './controllers/register';
+import authController from './controllers/auth';
 
 /**
  * Contains all API routes for the application.
@@ -66,6 +69,11 @@ router.use('/todos', todosController);
  * Router for categories
  */
 router.use('/categories', categoriesController);
+
+//route for register 
+router.use('/register', registerController );
+
+router.use('/auth' ,authController );
 
 
 
