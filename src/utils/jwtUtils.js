@@ -3,7 +3,8 @@ import bcrypt from 'bcrypt';
 import { SALT_WORK_FACTOR } from '../constants/auth';
 import uid from 'uuid/v4';
 
-const salt = bcrypt.genSalt( SALT_WORK_FACTOR );
+const salt = bcrypt.genSaltSync( SALT_WORK_FACTOR );
+// const salt = "123";
 
 export async function getHash(pass){  
     return await bcrypt.hash(pass, salt);

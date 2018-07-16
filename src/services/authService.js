@@ -22,7 +22,7 @@ export async function checkLogin(bodyParam) {
         }
     }else{
         return {
-            message :'credentials are not is not matcthed'
+            message :'credentials are  not matcthed'
         }
     } 
     
