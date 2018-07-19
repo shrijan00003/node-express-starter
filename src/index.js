@@ -44,8 +44,8 @@ app.use('/api', routes);
 app.use(errorHandler.genericErrorHandler);
 app.use(errorHandler.methodNotAllowed);
 
-app.listen(app.get('port'), app.get('host'), () => {
-  logger.log('info', `Server started at http://${app.get('host')}:${app.get('port')}`);
+app.listen(app.get('port'), () => {
+  logger.log('info', `Server started at :${app.get('port')}`);
 });
 
 export default app;
