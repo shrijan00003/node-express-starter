@@ -4,7 +4,10 @@
  */
 export function up(knex) {
   return knex.schema.alterTable('todos', table => {
-    table.integer('user_id').references('users.id');
+    table
+      .integer('user_id')
+      .references('id')
+      .inTable('users');
   });
 }
 
