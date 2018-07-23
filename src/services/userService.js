@@ -124,5 +124,7 @@ export function getByIdAndToken(userId,refreshToken){
       }
       return user;
     })
+  }else{
+    console.log(`------------not found------------`);
   }
 }

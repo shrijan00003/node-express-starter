@@ -9,6 +9,7 @@ export async function authenticate(req, res, next){
         req.userId = tokenData.data;
         next();
     }catch(err){
-        next(err);
+        console.log("--------------you are not authenticate from services ------------ ")
+        next(err + "You are not authenticate to do so " );
     }
 }//end of authenticateToken

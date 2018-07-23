@@ -22,7 +22,7 @@ export async function checkLogin(bodyParam) {
         }
     }else{
         return {
-            message :'credentials are  not matcthed'
+            error :'credentials are  not matcthed'
         }
     } 
     
@@ -41,7 +41,8 @@ export async function refresh(id, refreshToken){
         }
     }else{
         return {
-            message: "user credintial not found for this refresh Token"
+            message: "user credintial not found for this refresh Token",
+            status : 404
         }
     }
 }
@@ -54,8 +55,9 @@ export async function logout(userId, refreshToken){
             message: "successfully got logout "
         }
     }else{
-        return {
-            message : "Cannot logout !!!!!!!"
-        }
+        console.log(`--------------you are not authenticate from services  ${user}------------End`)
+       return {
+           message : "Sorry! can't logout"
+       }
     }
 }

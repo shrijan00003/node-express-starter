@@ -10,6 +10,42 @@ import Category from '../models/category';
 export function getAllTodos() {
   return Todo.fetchAll();
 }
+
+
+
+export function handleQuery(query){
+    const sort_by = query.sort_by || 'id';
+    const sort_order = query.sort_order || 'ASC';
+    const page = query.page || '1';
+    const page_size =  query.page_size || 10;
+
+    return Todo.forge({})
+    .query((qb)=>
+    {  
+        if(query.category_id)    
+        {
+            qb.select('*').from('todos').join('categories_todos', {'todos.id': 'categories_todos.todo_id'})
+            .where({category_id:query.category_id})
+        }
+        if(query.title)
+        {
+            qb.where('title','iLIKE', `%${query.title}%`);   
+        }        
+    })
+    .orderBy(sort_by , sort_order)
+    .fetchPage({
+        pageSize:page_size,
+        page:page
+    })
+    .then(todo => {
+      if(!todo){
+        throw new Boom.notFound('Todo not found');
+      }
+      return todo;
+    });
+}
+
+
   // if(query.title){
   //   return new Todo({ title : query.title }).fetch().then(todo => {
   //     if (!todo) {
@@ -40,6 +76,8 @@ export function getAllTodos() {
 
   
 // }
+
+
 
 /**
  * 

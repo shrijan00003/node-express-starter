@@ -13,5 +13,7 @@ export function up(knex) {
  * @return {Promise}
  */
 export function down(knex) {
-  return knex.schema.dropTable('todos');
+  return knex.schema.alterTable('todos', table => {
+    table.dropColumn('is_finished');
+  });
 }

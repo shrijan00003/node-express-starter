@@ -35,7 +35,6 @@ export function getCategory(id) {
 export function createCategory(categoryParams) {
 
   var category = new Category({ 
-      updated_at : categoryParams.updated_at,
       category_name : categoryParams.category_name
     });
     
