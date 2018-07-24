@@ -4,7 +4,7 @@
  */
 export function up(knex) {
   return knex.schema.alterTable('todos', table => {
-    table.boolean('is_finished',false);
+    table.boolean('is_finished', false);
   });
 }
 

@@ -2,13 +2,12 @@ import { Router } from 'express';
 import * as todoService from '../services/todoService';
 import { authenticate } from '../middlewares/auth';
 
-
 const router = Router();
 /**
  * findTodo
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
  * @description FINDING TODO FROM TODO SERVICES
  */
 function findTodo(req, res, next) {
@@ -23,10 +22,11 @@ function findTodo(req, res, next) {
  */
 router.get('/', (req, res, next) => {
   console.log(req.query);
-  todoService.handleQuery(req.query)
-  .then(data => res.json({data}))
-  .catch(err => next(err));
-  
+  todoService
+    .handleQuery(req.query)
+    .then(data => res.json({ data }))
+    .catch(err => next(err));
+
   // if(req.query.cat_id){
   //   todoService
   //   .getFilteredByCategoryId(req.query.cat_id)
@@ -56,16 +56,15 @@ router.get('/', (req, res, next) => {
   //     .getAllTodos(req.userId)
   //     .then(data => res.json({ data }))
   //     .catch(err => next(err));
-  // }   
+  // }
 });
-
 
 /**
  * GET /api/todos/:id
  */
 router.get('/:id', authenticate, (req, res, next) => {
   todoService
-    .getTodo(req.params.id,req.userId)
+    .getTodo(req.params.id, req.userId)
     .then(data => res.json({ data }))
     .catch(err => next(err));
 });
@@ -73,9 +72,9 @@ router.get('/:id', authenticate, (req, res, next) => {
 /**
  * POST /api/todos
  */
-router.post('/',authenticate,(req, res, next) => {
+router.post('/', authenticate, (req, res, next) => {
   todoService
-    .createTodo(req.body,req.userId)
+    .createTodo(req.body, req.userId)
     .then(data => res.status(200).json({ data }))
     .catch(err => next(err));
 });
@@ -83,7 +82,7 @@ router.post('/',authenticate,(req, res, next) => {
 /**
  * PUT /api/todos/:id
  */
-router.put('/:id',authenticate, findTodo, (req, res, next) => {
+router.put('/:id', authenticate, findTodo, (req, res, next) => {
   todoService
     .updateTodo(req.params.id, req.body, req.userId)
     .then(data => res.json({ data }))
@@ -99,6 +98,5 @@ router.delete('/:id', authenticate, findTodo, (req, res, next) => {
     .then(data => res.status(200).json({ data }))
     .catch(err => next(err));
 });
-
 
 export default router;

@@ -35,11 +35,12 @@ export function getUser(id) {
  */
 export async function createUser(user) {
   return new User({
-     name: user.name ,
-     email : user.email,
-     password : await jwtUtils.getHash(user.password)
-    }).save().then(user => user.refresh());
-
+    name: user.name,
+    email: user.email,
+    password: await jwtUtils.getHash(user.password)
+  })
+    .save()
+    .then(user => user.refresh());
 }
 
 /**
@@ -51,14 +52,14 @@ export async function createUser(user) {
  */
 export function updateUser(id, user) {
   return new User({ id })
-  .save({ 
-    name: user.name,
-    email: user.email,
-    password: user.password,
-    refresh_token: user.refresh_token,
-    deleted_at: user.deleted_at
-  })
-  .then(user => user.refresh());
+    .save({
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      refresh_token: user.refresh_token,
+      deleted_at: user.deleted_at
+    })
+    .then(user => user.refresh());
 }
 
 /**
@@ -71,60 +72,56 @@ export function deleteUser(id) {
   return new User({ id }).fetch().then(user => user.destroy());
 }
 
-
-
 /**
- * 
- * @param {*} emailParam 
+ *
+ * @param {*} emailParam
  */
-export function fetchByEmail(emailParam){
-  if(emailParam){
-    return User.forge({ email: emailParam})
-    .fetch()
-    .then(user => {
-      if(!user){
-        throw new Boom.notFound('User not found');
-      }
-      return user;
-    })
+export function fetchByEmail(emailParam) {
+  if (emailParam) {
+    return User.forge({ email: emailParam })
+      .fetch()
+      .then(user => {
+        if (!user) {
+          throw new Boom.notFound('User not found');
+        }
+
+        return user;
+      });
   }
 }
 
-
-
 /**
- * 
- * @param {*} idParam 
- * @param {*} refreshTokenParam 
+ *
+ * @param {*} idParam
+ * @param {*} refreshTokenParam
  */
-export function updateUserRefreshToken(idParam,refreshTokenParam){
-  if(idParam){
-    return User.forge({id:idParam})
-    .save({
-      refresh_token : refreshTokenParam
-    })
-    .then( user => user.refresh );
+export function updateUserRefreshToken(idParam, refreshTokenParam) {
+  if (idParam) {
+    return User.forge({ id: idParam })
+      .save({
+        refresh_token: refreshTokenParam
+      })
+      .then(user => user.refresh);
   }
 }
 
-
-
 /**
- * 
- * @param {*} userId 
- * @param {*} refreshToken 
+ *
+ * @param {*} userId
+ * @param {*} refreshToken
  */
-export function getByIdAndToken(userId,refreshToken){
-  if(userId && refreshToken){
-    return User.forge( { id : userId, refresh_token: refreshToken} )
-    .fetch()
-    .then(user => {
-      if(!user){
-        throw new Boom.notFound('user not found');
-      }
-      return user;
-    })
-  }else{
+export function getByIdAndToken(userId, refreshToken) {
+  if (userId && refreshToken) {
+    return User.forge({ id: userId, refresh_token: refreshToken })
+      .fetch()
+      .then(user => {
+        if (!user) {
+          throw new Boom.notFound('user not found');
+        }
+
+        return user;
+      });
+  } else {
     console.log(`------------not found------------`);
   }
 }

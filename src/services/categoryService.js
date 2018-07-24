@@ -33,18 +33,15 @@ export function getCategory(id) {
  * @return {Promise}
  */
 export function createCategory(categoryParams) {
+  let category = new Category({
+    category_name: categoryParams.category_name
+  });
 
-  var category = new Category({ 
-      category_name : categoryParams.category_name
-    });
-    
-  var categoryPromise = category
-    .save();
+  let categoryPromise = category.save();
 
   categoryPromise.then(category => category.refresh());
-    
-    return categoryPromise;
 
+  return categoryPromise;
 }
 
 /**
@@ -55,10 +52,12 @@ export function createCategory(categoryParams) {
  * @return {Promise}
  */
 export function updateCategory(id, category) {
-  return new Category({ id }).save({
-    updated_at : category.updated_at,
-    category_name : category.category_name
-    }).then(category => category.refresh());
+  return new Category({ id })
+    .save({
+      updated_at: category.updated_at,
+      category_name: category.category_name
+    })
+    .then(category => category.refresh());
 }
 
 /**
