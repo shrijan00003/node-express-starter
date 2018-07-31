@@ -37,7 +37,7 @@ export async function createUser(user) {
   return new User({
     name: user.name,
     email: user.email,
-    password: await jwtUtils.getHash(user.password)
+    password: await jwtUtils.getHash(user.password),
   })
     .save()
     .then(user => user.refresh());
@@ -57,7 +57,7 @@ export function updateUser(id, user) {
       email: user.email,
       password: user.password,
       refresh_token: user.refresh_token,
-      deleted_at: user.deleted_at
+      deleted_at: user.deleted_at,
     })
     .then(user => user.refresh());
 }
@@ -99,7 +99,7 @@ export function updateUserRefreshToken(idParam, refreshTokenParam) {
   if (idParam) {
     return User.forge({ id: idParam })
       .save({
-        refresh_token: refreshTokenParam
+        refresh_token: refreshTokenParam,
       })
       .then(user => user.refresh);
   }
@@ -122,6 +122,6 @@ export function getByIdAndToken(userId, refreshToken) {
         return user;
       });
   } else {
-    console.log(`------------not found------------`);
+    throw new Boom.notFound('user not found');
   }
 }

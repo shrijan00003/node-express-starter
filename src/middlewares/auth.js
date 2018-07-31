@@ -1,6 +1,4 @@
-import Boom from 'boom';
 import { verifyAccessToken } from '../utils/jwtUtils';
-import * as UserService from '../services/userService';
 
 export async function authenticate(req, res, next) {
   const accessToken = req.get('authorization');
@@ -9,7 +7,9 @@ export async function authenticate(req, res, next) {
     req.userId = tokenData.data;
     next();
   } catch (err) {
-    console.log('--------------you are not authenticate from services ------------ ');
-    next(err + 'You are not authenticate to do so ');
+    next(err + '-----------You are not authenticate to do so---------- ');
+    res.status(401).json({
+      err,
+    });
   }
 } // end of authenticateToken

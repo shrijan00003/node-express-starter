@@ -16,11 +16,11 @@ export async function checkLogin(bodyParam) {
     return {
       accessToken: accessToken,
       refreshToken: refreshToken,
-      id: user.id
+      id: user.id,
     };
   } else {
     return {
-      error: 'credentials are  not matcthed'
+      error: 'credentials are  not matcthed',
     };
   }
 }
@@ -34,12 +34,12 @@ export async function refresh(id, refreshToken) {
 
     return {
       accessToken: newAccessToken,
-      refreshToken: newRefreshToken
+      refreshToken: newRefreshToken,
     };
   } else {
     return {
       message: 'user credintial not found for this refresh Token',
-      status: 404
+      status: 404,
     };
   }
 }
@@ -50,13 +50,13 @@ export async function logout(userId, refreshToken) {
     await UserService.updateUserRefreshToken(userId, null);
 
     return {
-      message: 'successfully got logout '
+      message: 'successfully got logout ',
+      status: 200,
     };
   } else {
-    console.log(`--------------you are not authenticate from services  ${user}------------End`);
-
     return {
-      message: "Sorry! can't logout"
+      message: 'Sorry user cant found ',
+      status: 400,
     };
   }
 }
