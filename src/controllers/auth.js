@@ -33,21 +33,21 @@ router.post('/refresh', async (req, res, next) => {
 });
 
 router.post('/logout', authenticate, async (req, res, next) => {
-  // const userId = req.body.user_id;
   const userId = req.userId;
-  const refreshToken = req.body.refresh_token;
+  const refreshToken = req.body.refreshToken;
+  console.log(userId, refreshToken);
   try {
     const response = await AuthService.logout(userId, refreshToken);
+    console.log('response here', response);
     if (response) {
-      res.json(200).json(response);
+      res.status(200).json(response);
     } else {
-      res.json(401).json({
+      res.status(400).json({
         message: 'Not logged out',
       });
     }
   } catch (err) {
-    next(err);
-    res.status(401).json(err);
+    console.log(err);
   }
 });
 export default router;

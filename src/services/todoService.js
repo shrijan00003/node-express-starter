@@ -12,10 +12,10 @@ export function getAllTodos() {
 }
 
 export function handleQuery(query) {
-  const sort_by = query.sort_by || 'id';
-  const sort_order = query.sort_order || 'ASC';
+  const sortBy = query.sort_by || 'id';
+  const sortOrder = query.sort_order || 'ASC';
   const page = query.page || '1';
-  const page_size = query.page_size || 10;
+  const pageSize = query.page_size || 10;
 
   return Todo.forge({})
     .query(qb => {
@@ -29,10 +29,10 @@ export function handleQuery(query) {
         qb.where('title', 'iLIKE', `%${query.title}%`);
       }
     })
-    .orderBy(sort_by, sort_order)
+    .orderBy(sortBy, sortOrder)
     .fetchPage({
-      pageSize: page_size,
-      page: page
+      pageSize: pageSize,
+      page: page,
     })
     .then(todo => {
       if (!todo) {
@@ -89,15 +89,15 @@ export function getFilteredByTitle(titleParam) {
   }
 }
 
-export function getFilteredByCategoryId(cat_id) {
-  if (cat_id) {
-    return new Category({ id: cat_id })
+export function getFilteredByCategoryId(catId) {
+  if (catId) {
+    return new Category({ id: catId })
       .fetch({
-        withRelated: 'todos'
+        withRelated: 'todos',
       })
       .then(category => {
         if (!category) {
-          throw new Boom.notFound(' ');
+          throw { status: 404, errorMessage: 'Category not found ' };
         }
 
         return category;
@@ -164,7 +164,7 @@ export function getOffsetPages(page, perPage) {
   return new Todo()
     .fetchPage({
       pageSize: parseInt(perPage),
-      page: parseInt(page)
+      page: parseInt(page),
     })
     .then(todo => {
       if (!todo) {
@@ -173,7 +173,7 @@ export function getOffsetPages(page, perPage) {
 
       return todo;
     })
-    .catch(err => next(err));
+    .catch(err => ({ msg: 'err' + err }));
 }
 
 /**
@@ -183,13 +183,20 @@ export function getOffsetPages(page, perPage) {
  * @return {Promise}
  */
 export function getTodo(id, userId) {
-  return new Todo({ id, userId }).fetch().then(todo => {
-    if (!todo) {
-      throw new Boom.notFound('Todo not found');
-    }
+  if (parseInt(id) === parseInt(userId)) {
+    return Todo.forge({})
+      .query(qb => {
+        qb.where('user_id', userId);
+      })
+      .fetchAll()
+      .then(todo => {
+        if (!todo) {
+          throw { status: 404, errorMessage: 'Todos not found ' };
+        }
 
-    return todo;
-  });
+        return todo;
+      });
+  }
 }
 
 /**
@@ -203,7 +210,7 @@ export function createTodo(todo, userId) {
     updated_at: todo.updated_at,
     title: todo.title,
     details: todo.details,
-    user_id: userId
+    user_id: userId,
   })
     .save()
     .then(todo => todo.refresh());
@@ -221,7 +228,7 @@ export function updateTodo(id, todo, userId) {
     .save({
       updated_at: new Date(),
       title: todo.title,
-      details: todo.details
+      details: todo.details,
     })
     .then(todo => todo.refresh());
 }

@@ -21,30 +21,25 @@ function findTodo(req, res, next) {
  * GET /api/todos
  */
 router.get('/', (req, res, next) => {
-  console.log(req.query);
   todoService
     .handleQuery(req.query)
     .then(data => res.json({ data }))
     .catch(err => next(err));
-
   // if(req.query.cat_id){
   //   todoService
   //   .getFilteredByCategoryId(req.query.cat_id)
   //   .then(data => res.json({ data }))
   //   .catch(err => next(err));
-
   // }else if(req.query.title){
   //   todoService
   //   .getFilteredByTitle(req.query.title)
   //   .then(data => res.json({ data } ))
   //   .catch(err => next(err));
-
   // }else if(req.query.sortBy){
   //   todoService
   //   .getSortedTodos(req.query.type, req.query.sortBy)
   //   .then(data => res.json({ data }))
   //   .catch(err => next(err));
-
   // }else if(req.query.page){
   //   todoService
   //   .getOffsetPages(req.query.page, req.query.perpage)
@@ -65,8 +60,11 @@ router.get('/', (req, res, next) => {
 router.get('/:id', authenticate, (req, res, next) => {
   todoService
     .getTodo(req.params.id, req.userId)
-    .then(data => res.json({ data }))
-    .catch(err => next(err));
+    .then(data => {
+      return res.json({ data });
+    })
+    .catch(err => res.json({ msg: 'error in todoservice' + err }));
+  // .catch(err => next(err));
 });
 
 /**

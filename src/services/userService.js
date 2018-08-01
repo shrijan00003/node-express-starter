@@ -101,7 +101,10 @@ export function updateUserRefreshToken(idParam, refreshTokenParam) {
       .save({
         refresh_token: refreshTokenParam,
       })
-      .then(user => user.refresh);
+      .then(user => user.refresh)
+      .catch(err => {
+        console.log('error occured while updating refresh token ' + err);
+      });
   }
 }
 

@@ -7,7 +7,9 @@ const salt = bcrypt.genSaltSync(SALT_WORK_FACTOR);
 // const salt = "123";
 
 export async function getHash(pass) {
-  return await bcrypt.hash(pass, salt);
+  const hashedOne = await bcrypt.hash(pass, salt);
+
+  return hashedOne;
 }
 
 export async function verifyUser(password, user) {
@@ -19,7 +21,7 @@ export async function verifyUser(password, user) {
 
 export function createAccessToken(data) {
   return jwt.sign({ data }, process.env.ACCESS_TOKEN_CONST, {
-    expiresIn: 60 * 5,
+    expiresIn: 60 * 1,
   });
 }
 

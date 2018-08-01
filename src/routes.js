@@ -53,12 +53,11 @@ router.get('/swagger.json', (req, res) => {
 router.get('/', (req, res) => {
   res.json({
     app: req.app.locals.title,
-    apiVersion: req.app.locals.version
+    apiVersion: req.app.locals.version,
   });
 });
 
 router.use('/users', usersController);
-
 
 /**
  * Router for todos
@@ -70,14 +69,9 @@ router.use('/todos', todosController);
  */
 router.use('/categories', categoriesController);
 
-//route for register 
-router.use('/register', registerController );
+// route for register
+router.use('/register', registerController);
 
-router.use('/auth' ,authController );
-
-
-
-
-
+router.use('/auth', authController);
 
 export default router;

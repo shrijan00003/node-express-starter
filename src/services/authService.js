@@ -45,18 +45,21 @@ export async function refresh(id, refreshToken) {
 }
 
 export async function logout(userId, refreshToken) {
-  const user = await UserService.getByIdAndToken(userId, refreshToken);
-  if (user) {
-    await UserService.updateUserRefreshToken(userId, null);
-
-    return {
-      message: 'successfully got logout ',
-      status: 200,
-    };
-  } else {
-    return {
-      message: 'Sorry user cant found ',
-      status: 400,
-    };
+  try {
+    const user = await UserService.getByIdAndToken(userId, refreshToken);
+    console.log(user);
+    if (user && (await UserService.updateUserRefreshToken(userId, null))) {
+      return {
+        status: 200,
+        message: 'successfully got logout ',
+      };
+    } else {
+      return {
+        status: 404,
+        message: 'Sorry user cant found ',
+      };
+    }
+  } catch (err) {
+    console.log('error occured on logout in authservice with err =====' + err);
   }
 }

@@ -7,9 +7,8 @@ export async function authenticate(req, res, next) {
     req.userId = tokenData.data;
     next();
   } catch (err) {
-    next(err + '-----------You are not authenticate to do so---------- ');
     res.status(401).json({
-      err,
+      msg: 'access token is not verified' + err,
     });
   }
-} // end of authenticateToken
+}
